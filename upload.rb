@@ -17,12 +17,12 @@ post "/upload" do
     upload(unique_hash + '/' + game_filename, params[:playerFile][:tempfile])
     game_page_object = get_s3_object(unique_hash + '/index.html')
     game_page_object.write(erb(:view_game, {}, {game_name: game_name, game_width: game_width, game_height: game_height, game_filename: game_filename}), :acl => :public_read, :content_type => "text/html")
-    body "#{game_page_object.public_url.to_s.chomp('index.html')}"
+    body "http://i.makegam.es/#{unique_hash}/" # game_page_object.public_url.to_s.chomp('index.html')}"
 end
 
 # @return S3Object
 def get_s3_object(filename)
-  bucket_name = 'unihost'
+  bucket_name = 'i.makegam.es'
   s3          = AWS::S3.new(
       :access_key_id     => ENV['AWS_ACCESS_KEY_ID'],
       :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
